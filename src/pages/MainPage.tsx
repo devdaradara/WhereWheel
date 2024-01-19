@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
 import styled from "styled-components";
+import OverCard from "../components/OverCard";
 
 const PageContainer = styled.div`
   width: 100%;
@@ -42,6 +43,16 @@ function MainPage() {
           />
         </Map>
       )}
+
+      {/* <OverCard
+        line={2}
+        stationNum={239}
+        stationName="홍대입구"
+        charger={2}
+        lift={true}
+        location="대합실"
+        onClose={() => {}}
+      /> */}
     </PageContainer>
   );
 }
