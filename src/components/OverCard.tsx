@@ -19,7 +19,7 @@ const AllContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   vertical-align: top;
-  padding: 10px 0px 0px 20px;
+  margin: 0px 0px 0px 10px;
 `;
 
 const ImageContainer = styled.div`
@@ -31,9 +31,21 @@ const ImageContainer = styled.div`
   justify-content: center;
 `;
 
+const OverCardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0px 10px 20px 10px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  overflow: hidden; 
+  min-width: 200px; 
+  min-height: 100px;
+`;
+
 const PageContainer = styled.div`
   width: 400px;
-  height: 110px;
+  height: 140px;
   border-radius: 5px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -120,14 +132,15 @@ const ShortDetailContainer = styled.div`
 `;
 
 const ClosedButton = styled.button`
-  width: 40px;
+  width: 20px;
   height: 20px;
   color: #7c8bbe;
   font-size: 16px;
-  font-family: "GmarketSans";
+  font-family: "Pretendard-SemiBold";
   background-color: #ffffff;
   border: none;
   outline: none;
+  padding-top: 15px;
   cursor: pointer;
 `;
 
@@ -188,6 +201,7 @@ function OverCard({ line, stationNum, stationName, charger, lift, onClose, locat
   };
 
   return (
+    <OverCardContainer>
     <AllContainer>
       <PageContainer>
         <TitleContainer line={line}>
@@ -200,6 +214,7 @@ function OverCard({ line, stationNum, stationName, charger, lift, onClose, locat
       </PageContainer>
       <ClosedButton onClick={handleClose}>X</ClosedButton>
     </AllContainer>
+    </OverCardContainer>
   );
 }
 
