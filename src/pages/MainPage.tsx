@@ -32,7 +32,7 @@ function MainPage() {
       {loaded && (
         <Map
           center={{ lat: location.latitude, lng: location.longitude }}
-          style={{ width: "100%", height: "900px" }}
+          style={{ width: "100%", height: "600px" }}
           level={3}
         >
           <MapMarker

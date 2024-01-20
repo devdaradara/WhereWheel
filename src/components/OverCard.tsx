@@ -4,6 +4,15 @@ import LocationIcon from '../assets/icons/Location.png';
 import ChargerIcon from '../assets/icons/Charger.png';
 import WheelchairIcon from '../assets/icons/Wheelchair.png';
 import { useNavigate } from "react-router-dom";
+import One from "../assets/icons/lines/Circled 1.png";
+import Two from "../assets/icons/lines/Circled 2.png";
+import Three from "../assets/icons/lines/Circled 3.png";
+import Four from "../assets/icons/lines/Circled 4.png";
+import Five from "../assets/icons/lines/Circled 5.png";
+import Six from "../assets/icons/lines/Circled 6.png";
+import Seven from "../assets/icons/lines/Circled 7.png";
+import Eight from "../assets/icons/lines/Circled 8.png";
+import Nine from "../assets/icons/lines/Circled 9.png";
 
 const AllContainer = styled.div`
   display: flex;
@@ -46,6 +55,37 @@ const lineColors: { [key: number]: string } = {
   9: '#A59E85',
 };
 
+const lineIcons: { [key: number]: string } = {
+  1: One,
+  2: Two,
+  3: Three,
+  4: Four,
+  5: Five,
+  6: Six,
+  7: Seven,
+  8: Eight,
+  9: Nine,
+};
+
+const lineFilters: { [key: number]: string } = {
+  1: 'invert(12%) sepia(65%) saturate(5436%) hue-rotate(202deg) brightness(93%) contrast(101%)',
+  2: 'invert(33%) sepia(98%) saturate(2234%) hue-rotate(125deg) brightness(97%) contrast(105%)',
+  3: 'invert(40%) sepia(95%) saturate(1995%) hue-rotate(359deg) brightness(100%) contrast(109%)',
+  4: 'invert(62%) sepia(55%) saturate(6872%) hue-rotate(166deg) brightness(96%) contrast(104%)',
+  5: 'invert(34%) sepia(11%) saturate(3820%) hue-rotate(237deg) brightness(89%) contrast(87%)',
+  6: 'invert(21%) sepia(92%) saturate(781%) hue-rotate(346deg) brightness(92%) contrast(93%)',
+  7: 'invert(39%) sepia(57%) saturate(479%) hue-rotate(25deg) brightness(91%) contrast(92%)',
+  8: 'invert(22%) sepia(93%) saturate(7215%) hue-rotate(322deg) brightness(89%) contrast(109%)',
+  9: 'invert(75%) sepia(6%) saturate(1004%) hue-rotate(10deg) brightness(85%) contrast(84%)',
+};
+
+const LineNumberContainer = styled.img<{ line: number }>`
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+  filter: ${props => lineFilters[props.line]};
+`;
+
 const TitleContainer = styled.div< {line: number} >`
   grid-column: span 2;
   font-size: 25px;
@@ -53,6 +93,8 @@ const TitleContainer = styled.div< {line: number} >`
   width: 80%;
   margin-bottom: 10px;
   color: ${props => lineColors[props.line] || '#313866'};
+  display: flex;
+  align-items: center;
 `;
 
 const ShortContainer = styled.div`
@@ -115,9 +157,9 @@ function ShotInform({ image, title, content }: ShotInformProps) {
     <ShortContainer>
       <ImageContainer>
         <img src={image} alt={title} style={
-          title == "운영수량" ? chargerIconCSS :
-          title == "리프트여부" ? liftIconCSS :
-          title == "설치위치" ? locationIconCSS :
+          title === "운영수량" ? chargerIconCSS :
+          title === "리프트여부" ? liftIconCSS :
+          title === "설치위치" ? locationIconCSS :
           undefined
         } />
       </ImageContainer>
@@ -148,7 +190,10 @@ function OverCard({ line, stationNum, stationName, charger, lift, onClose, locat
   return (
     <AllContainer>
       <PageContainer>
-        <TitleContainer line={line}>{stationName}</TitleContainer>
+        <TitleContainer line={line}>
+          <LineNumberContainer src={lineIcons[line]} alt={`Line ${line}`} line={line} />
+          {stationName}
+        </TitleContainer>
         <ShotInform image={ChargerIcon} title="운영수량" content={`${charger}개`} />
         <ShotInform image={WheelchairIcon} title="리프트여부" content={lift ? "있음" : "없음"} />
         <ShotInform image={LocationIcon} title="설치위치" content={location} />
