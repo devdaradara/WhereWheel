@@ -3,6 +3,7 @@ import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
 import styled from "styled-components";
 import OverCard from "../components/OverCard";
 import EventMarker from "../components/EventMarker";
+import { mapData } from "../assets/data/mapData.js";
 
 const PageContainer = styled.div`
   width: 100%;
@@ -10,7 +11,10 @@ const PageContainer = styled.div`
 `;
 
 function MainPage() {
-  const [location, setLocation] = useState({ latitude: 37.5665, longitude: 126.9780 });
+  const [location, setLocation] = useState({
+    latitude: 37.5665,
+    longitude: 126.978,
+  });
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -20,7 +24,7 @@ function MainPage() {
   const successHandler = (response: any) => {
     const { latitude, longitude } = response.coords;
     setLocation({ latitude, longitude });
-    setLoaded(true); 
+    setLoaded(true);
   };
 
   const errorHandler = (error: any) => {
@@ -36,15 +40,21 @@ function MainPage() {
           style={{ width: "100%", height: "600px" }}
           level={3}
         >
-          <EventMarker 
-            line={2}
-            stationNum={239}
-            stationName="홍대입구"
-            charger={2}
-            lift={true}
-            markLocation={{ latitude: location.latitude, longitude: location.longitude }}
-            location="대합실"
-          />
+          {mapData[0].data.map((station, index) => (
+            <EventMarker
+              key={index}
+              line={station.호선}
+              stationNum={station["고유역번호(외부역코드)"]}
+              stationName={station.역명}
+              charger={station.충전기수}
+              lift={true}
+              markLocation={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }}
+              location={station.설치위치}
+            />
+          ))}
         </Map>
       )}
     </PageContainer>
