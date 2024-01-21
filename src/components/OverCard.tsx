@@ -45,7 +45,7 @@ const OverCardContainer = styled.div`
 
 const PageContainer = styled.div`
   width: 400px;
-  height: 140px;
+  height: 100%;
   border-radius: 5px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -115,6 +115,7 @@ const ShortContainer = styled.div`
   font-size: 16px;
   align-items: center;
   margin-bottom: 10px;
+  grid-column: span 2; 
 `;
 
 const ShortTitleContainer = styled.div`

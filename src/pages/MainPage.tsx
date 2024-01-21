@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
 import styled from "styled-components";
 import OverCard from "../components/OverCard";
 import EventMarker from "../components/EventMarker";
-import { mapData } from "../assets/data/mapData.js";
+
+type StationType = {
+  호선: number;
+  고유역번호: number;
+  역명: string;
+  충전기수: number;
+  설치위치: string;
+};
+
+type ApiResponse = {
+  page: number;
+  perPage: number;
+  totalCount: number;
+  currentCount: number;
+  matchCount: number;
+  data: StationType[];
+};
 
 const PageContainer = styled.div`
   width: 100%;
@@ -16,21 +32,37 @@ function MainPage() {
     longitude: 126.978,
   });
   const [loaded, setLoaded] = useState(false);
+  const [stationData, setStationData] = useState<StationType[]>([]);
+  
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
   }, []);
 
-  const successHandler = (response: any) => {
+  const successHandler = (response: GeolocationPosition) => {
     const { latitude, longitude } = response.coords;
     setLocation({ latitude, longitude });
     setLoaded(true);
   };
 
-  const errorHandler = (error: any) => {
+  const errorHandler = (error: GeolocationPositionError) => {
     console.error("Error getting location", error);
     setLoaded(true);
   };
+
+  useEffect(() => {
+    const apiKey = process.env.REACT_APP_WHEELCHAIR_CHARGER_KEY;
+    const apiUrl = `http://api.odcloud.kr/api/15085994/v1/uddi:7a307ef7-00b6-4d5e-a70f-eb429a85365a?page=1&perPage=115&serviceKey=${apiKey}`;
+
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data: ApiResponse) => {
+        setStationData(data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
 
   return (
     <PageContainer>
@@ -40,21 +72,18 @@ function MainPage() {
           style={{ width: "100%", height: "600px" }}
           level={3}
         >
-          {mapData[0].data.map((station, index) => (
-            <EventMarker
-              key={index}
-              line={station.호선}
-              stationNum={station["고유역번호(외부역코드)"]}
-              stationName={station.역명}
-              charger={station.충전기수}
-              lift={true}
-              markLocation={{
-                latitude: location.latitude,
-                longitude: location.longitude,
-              }}
-              location={station.설치위치}
-            />
-          ))}
+          {stationData &&
+            stationData.map((station, index) => (
+              <EventMarker
+                key={index}
+                line={station.호선}
+                stationNum={station.고유역번호}
+                stationName={station.역명}
+                charger={station.충전기수}
+                lift={true}
+                location={station.설치위치}
+              />
+            ))}
         </Map>
       )}
     </PageContainer>
